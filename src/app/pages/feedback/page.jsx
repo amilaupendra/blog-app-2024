@@ -3,59 +3,77 @@
 import { useState, useRef, useEffect } from "react";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ImageIcon from "@mui/icons-material/Image";
+import AWS from 'aws-sdk'; // Import entire SDK (optional)
+// import AWS from 'aws-sdk/global'; // Import global AWS namespace (recommended)
+import S3 from 'aws-sdk/clients/s3'; 
 
 import BlogPost from "@/app/components/blogpost/page"
 
 const page = () => {
   const [title, setTitle] = useState("");
-  const [image, setImage] = useState("image url");
+  const [image, setImage] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [uploading, setUploading] = useState(false)
   const [author, setAuthor] = useState("");
   const [content, setContent] = useState("");
   const[blogsArray, setblogsArray]= useState('')
   const currentDate = new Date();
 
+  const allowedTypes = [
+    'image/jpeg',
+    'image/png',
+    // Add more supported types as needed
+  ];
+
 
   const [showBlogForm, setShowBlogForm] = useState(false);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-  };
+
 
   const submitForm = async (event) => {
-    // event.preventDefault();
-    const formData = {
-      Title: title,
-      ImageUrl: image,
-      Author: author,
-      PublishedDate: currentDate,
-      Content: content,
-    };
+    event.preventDefault();
+    try {
+      const uploadedImageUrl = await uploadFile();
 
-    console.log(formData);
+      const formData = {
+        Title: title,
+        ImageUrl: uploadedImageUrl, // Use the returned URL here
+        Author: author,
+        PublishedDate: currentDate,
+        Content: content,
+      };
 
-    if (title != "" && author != "" && content != "") {
-      const url =
-        "https://lxgn0999u8.execute-api.ap-south-1.amazonaws.com/dev/blogpost";
+      console.log(formData);
 
-      const response = await fetch(url, {
-        method: "POST",
-        body: JSON.stringify(formData), 
-      });
+      if (title !== "" && author !== "" && content !== "") {
+        const url = "https://lxgn0999u8.execute-api.ap-south-1.amazonaws.com/dev/blogpost";
 
-      if (response.ok) {
-        alert("succusfully submitted the form");
-        setTitle(""); 
-        setImage("");
-        setAuthor("");
-        setContent("");
-        setDate("");
-        setShowBlogForm(false);
+        const response = await fetch(url, {
+          method: "POST",
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          alert("Successfully submitted the form");
+          setTitle("");
+          setImage("");
+          setAuthor("");
+          setContent("");
+          setImageUrl(""); // Clear the image URL
+          setShowBlogForm(false);
+          fetchData(); // Refresh the blog list after submission
+        } else {
+          alert("Error submitting the form");
+        }
+      } else {
+        alert("Please fill in all the fields");
       }
-    } else {
-      return alert("abc");
+    } catch (error) {
+      alert("Error during form submission: " + error.message);
     }
   };
+
+
 
   useEffect(()=>{
     fetchData();
@@ -85,10 +103,52 @@ const page = () => {
   };
 
   const handleFileChange = (event) => {
-    const selectedImage = event.target.files[0];
-    console.log("Selected image:", selectedImage);
-    setImage("image url");
+    const selectedFile = event.target.files[0];
+    if (allowedTypes.includes(selectedFile.type)) {
+      setImage(selectedFile);
+    } else {
+      alert('Invalid file type. Only images and PDFs are allowed.');
+    }
   };
+
+  const uploadFile = async () => {
+    setUploading(true)
+    const S3_BUCKET = "fullstackblogsite"; // Replace with your bucket name
+    const REGION = "ap-south-1"; // Replace with your region
+
+    AWS.config.update({
+      accessKeyId: "AKIA5FTZBYONN7WVEO4L",
+      secretAccessKey: "Aim23I4t1LF54W9qSZh2tge0X7lWgeZ1tYoUL0j4",
+    });
+
+    const s3 = new S3({
+      params: { Bucket: S3_BUCKET },
+      region: REGION,
+    });
+
+    const params = {
+      Bucket: S3_BUCKET,
+      Key: image.name,
+      Body: image,
+      ContentType: image.type,
+    };
+    
+    try {
+      const upload = await s3.putObject(params).promise();
+      console.log(upload);
+      const url = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/${image.name}`
+      setImageUrl(url);
+      setUploading(false)
+      alert("File uploaded successfully.");
+      return url;
+    } catch (error) {
+      console.error(error);
+      setUploading(false)
+      alert("Error uploading file: " + error.message); // Inform user about the error
+    }
+  };
+
+
   return (
     <div
       className={`h-svh md:mx-20 ${
@@ -98,7 +158,7 @@ const page = () => {
       <div className=" h-[40%] bg-black flex justify-center items-center">
         <div className="avatar">
           <div className="w-12 h-12 rounded-full">
-            <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+            <img src="" />
           </div>
         </div>
         <div>
@@ -132,7 +192,6 @@ const page = () => {
                 type="text"
                 placeholder="Title"
                 id="title"
-                required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-full font-semibold rounded-sm"
@@ -142,7 +201,6 @@ const page = () => {
               {/* <label htmlFor="title">Author:</label> */}
               <input
                 type="text"
-                required
                 placeholder="Author"
                 id="author"
                 value={author}
@@ -156,17 +214,15 @@ const page = () => {
               <textarea
                 className="w-full h-[300px] rounded-sm resize-y"
                 id="content"
-                required
                 placeholder="Type your content here."
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
               />
             </div>
             <div className="mx-5 bg-white">
-              <button>
+              <button type="button">
                 <ImageIcon onClick={handleIconClick} />
                 <input
-                disabled
                   type="file"
                   accept="image/*"
                   ref={fileInputRef}
@@ -176,7 +232,7 @@ const page = () => {
               </button>
             </div>
             <div className="flex justify-center mt-2">
-              <button className="btn" type="Post">
+              <button className="btn" type="submit">
                 Submit
               </button>
             </div>
