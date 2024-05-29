@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from 'next/image'
 
 const page = ({ Title, ImageUrl, Author, PublishedDate, Content }) => {
   const currentDate = new Date(PublishedDate);
@@ -18,7 +19,7 @@ const page = ({ Title, ImageUrl, Author, PublishedDate, Content }) => {
   return (
     <div className="container w-full my-2 mb-10 rounded-xl bg-stone-100 md:flex blog-post">
       <div className=" md:w-1/3 md:h-full">
-      <img className="object-fill w-full h-full p-4" src={ImageUrl} alt={ImageUrl} />
+      <Image width={500} height={500}  src={ImageUrl} alt={ImageUrl} />
       </div>
       <div className="md:w-2/3">
       <h2 className="pb-8 text-xl font-bold lg:text-3xl ">{Title}</h2>

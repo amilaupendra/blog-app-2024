@@ -1,5 +1,7 @@
 "use client";
 
+import Image from 'next/image'
+
 import { useState, useRef, useEffect } from "react";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ImageIcon from "@mui/icons-material/Image";
@@ -158,7 +160,7 @@ const page = () => {
       <div className=" h-[40%] bg-slate-500  flex justify-center items-center">
         <div className=" avatar">
           <div className="w-12 h-12 rounded-full">
-            <img src="https://picsum.photos/200" />
+            <Image width={500} height={500} src="https://picsum.photos/200" alt="Picture of the author" />
           </div>
         </div>
         <div className="w-2/5">
