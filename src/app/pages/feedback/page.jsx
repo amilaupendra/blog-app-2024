@@ -155,18 +155,18 @@ const page = () => {
         showBlogForm ? "bg-black bg-opacity-50" : ""
       } `}
     >
-      <div className=" h-[40%] bg-black flex justify-center items-center">
-        <div className="avatar">
+      <div className=" h-[40%] bg-slate-500  flex justify-center items-center">
+        <div className=" avatar">
           <div className="w-12 h-12 rounded-full">
-            <img src="" />
+            <img src="https://picsum.photos/200" />
           </div>
         </div>
-        <div>
+        <div className="w-2/5">
           <button
             onClick={() => setShowBlogForm(true)}
-            className="bg-white rounded-lg w-96"
+            className="w-full bg-white rounded-lg"
           >
-            What's on your mind
+            What's on your mind          
           </button>
         </div>
       </div>
@@ -177,7 +177,7 @@ const page = () => {
           }`}
         >
           <form
-            className="fixed flex-col items-center justify-center w-screen h-auto pb-5 bg-blue-900 top-20 lg:w-1/2 "
+            className="fixed flex-col items-center justify-center w-screen h-auto pb-5 bg-gray-100 top-20 lg:w-1/2 "
             onSubmit={submitForm}
           >
             <button

@@ -29,10 +29,10 @@ Amplify.configure(awsExports);
 function Home({ signOut, user }) {
 
   return (
-    <>
+    <div className="px-4 m-auto bg-white">
     <Navbar></Navbar>
     <Page></Page>
-    </>
+    </div>
   );
 }
 

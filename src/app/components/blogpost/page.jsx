@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 const page = ({ Title, ImageUrl, Author, PublishedDate, Content }) => {
   const currentDate = new Date(PublishedDate);
@@ -11,17 +11,23 @@ const page = ({ Title, ImageUrl, Author, PublishedDate, Content }) => {
   const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   console.log(formattedDate);
 
+
   console.log(Title,ImageUrl);
   return (
-    <div className="w-full my-2 blog-post bg-slate-400">
-      <h2 className="pb-2 font-bold ">{Title}</h2>
-      <img className="w-[50%] h-[250px]" src={ImageUrl} alt={ImageUrl} />
+    <div className="container w-full my-2 mb-10 rounded-xl bg-stone-100 md:flex blog-post">
+      <div className=" md:w-1/3 md:h-full">
+      <img className="object-fill w-full h-full p-4" src={ImageUrl} alt={ImageUrl} />
+      </div>
+      <div className="md:w-2/3">
+      <h2 className="pb-8 text-xl font-bold lg:text-3xl ">{Title}</h2>
       <p>
         <strong>Author:</strong> {Author}
       </p>
       <p className="pb-2 text-xs italic">Published Date {formattedDate}
       </p>
       <p className="text-justify">{Content}</p>
+      </div>
+      
     </div>
   );
 };
