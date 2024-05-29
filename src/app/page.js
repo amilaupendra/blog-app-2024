@@ -1,9 +1,9 @@
 'use client'
 
-import { Amplify, Auth, API } from "aws-amplify";
+import { Amplify } from "aws-amplify";
 import "@aws-amplify/ui-react/styles.css";
 import awsExports from "../aws-exports";
-import { withAuthenticator ,AmplifyTheme} from '@aws-amplify/ui-react';
+import { withAuthenticator} from '@aws-amplify/ui-react';
 
 
 import Page from "./pages/feedback/page";

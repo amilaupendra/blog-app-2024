@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+"use client";
+
+import React from "react";
 
 const page = ({ Title, ImageUrl, Author, PublishedDate, Content }) => {
   const currentDate = new Date(PublishedDate);

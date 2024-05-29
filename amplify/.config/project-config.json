@@ -2,7 +2,7 @@
   "providers": [
     "awscloudformation"
   ],
-  "projectName": "bloghubsite",
+  "projectName": "blogger",
   "version": "3.1",
   "frontend": "javascript",
   "javascript": {
