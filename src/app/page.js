@@ -6,8 +6,8 @@ import awsExports from "../aws-exports";
 import { withAuthenticator} from '@aws-amplify/ui-react';
 
 
-import Page from "./pages/feedback/page";
-import Navbar from '@/app/components/navbar/page'
+import Feed from "./pages/feedback/Feed";
+import Navbar from '@/app/components/navbar/Navbar'
 
 
 Amplify.configure(awsExports);
@@ -31,7 +31,7 @@ function Home({ signOut, user }) {
   return (
     <div className="px-4 m-auto bg-white">
     <Navbar></Navbar>
-    <Page></Page>
+    <Feed></Feed>
     </div>
   );
 }

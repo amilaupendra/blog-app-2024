@@ -3,7 +3,7 @@
 import React from "react";
 import Image from 'next/image'
 
-const page = ({ Title, ImageUrl, Author, PublishedDate, Content }) => {
+const BlogPost = ({ Title, ImageUrl, Author, PublishedDate, Content }) => {
   const currentDate = new Date(PublishedDate);
   const year = currentDate.getFullYear();
   const month = String(currentDate.getMonth() + 1).padStart(2, "0"); 
@@ -35,4 +35,4 @@ const page = ({ Title, ImageUrl, Author, PublishedDate, Content }) => {
   );
 };
 
-export default page;
+export default BlogPost;

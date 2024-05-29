@@ -9,9 +9,9 @@ import AWS from 'aws-sdk'; // Import entire SDK (optional)
 // import AWS from 'aws-sdk/global'; // Import global AWS namespace (recommended)
 import S3 from 'aws-sdk/clients/s3'; 
 
-import BlogPost from "@/app/components/blogpost/page"
+import BlogPost from "@/app/components/blogpost/BlogPost"
 
-const page = () => {
+const Feed = () => {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -260,4 +260,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Feed;
