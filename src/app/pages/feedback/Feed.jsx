@@ -168,7 +168,7 @@ const Feed = () => {
             onClick={() => setShowBlogForm(true)}
             className="w-full bg-white rounded-lg"
           >
-            What's on your mind          
+            What is on your mind          
           </button>
         </div>
       </div>
